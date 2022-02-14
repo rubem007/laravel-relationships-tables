@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\{
+    Course,
     User,
     Preference
 };
@@ -17,6 +18,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/one-to-many', function () {
+    //$course = Course::create(['name' => 'Curso de Laravel']);
+
+    $course = Course::first();
+
+    $data = ['name' => 'Módulo x2'];
+
+    $course->modules()->create($data); //Insere o módulo a partir do relacionamento
+
+    // $course->modules()->get();
+    $modules = $course->modules;
+
+    dd($modules);
+});
+
 Route::get('/one-to-one', function () {
     $user = User::first();
 
@@ -32,9 +48,13 @@ Route::get('/one-to-one', function () {
         $user->preference()->save($preference);
     }
 
-
-
     $user->refresh();
+
+    /* 
+    Delele preference
+    $user->preference->delete();
+     */
+    dd($user->preference);
 });
 
 Route::get('/', function () {
