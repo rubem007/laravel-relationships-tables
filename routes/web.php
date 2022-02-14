@@ -76,7 +76,7 @@ Route::get('/one-to-one', function () {
     if ($user->preference) {
         $user->preference->update($data);
     } else {
-        //$user->preference()->create($data); OU
+        //$user->preference()->create($data); Or
         $preference = new Preference($data);
         $user->preference()->save($preference);
     }
