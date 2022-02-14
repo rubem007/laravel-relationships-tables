@@ -2,6 +2,7 @@
 
 use App\Models\{
     Course,
+    Permission,
     User,
     Preference
 };
@@ -17,6 +18,38 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/many-to-many-pivot', function () {
+    $user = User::find(1);
+    /* $user->permissions()->attach([
+        2 => ['active' => false],
+    ]); */
+
+    echo "<br> {$user->name} </br>";
+    foreach ($user->permissions as $permission) {
+        echo "{$permission->name} - {$permission->pivot->active} <br>";
+    }
+});
+
+Route::get('/many-to-many', function () {
+    //dd(Permission::create(['name' => 'menu_03']));
+
+    $user = User::find(1);
+
+    $permission = Permission::find(1);
+    $user->permissions()->save($permission); //Save only one permission
+    /* $user->permissions()->saveMany([
+        Permission::find(4),
+        Permission::find(3),
+    ]); */
+    //$user->permissions()->sync([1, 4]); Elimina as permissões do user e insere as novas permissões
+    //$user->permissions()->attach([1, 3]);
+    //$user->permissions()->detach([1]); // Elimina as permissões do user
+
+    $user->refresh();
+
+    dd($user->permissions);
+});
 
 Route::get('/one-to-many', function () {
     //$course = Course::create(['name' => 'Curso de Laravel']);
